@@ -4,6 +4,7 @@ import TextSelector from '../components/TextSelector';
 import ImageSelector from '../components/ImageSelector';
 import { saveAs } from 'file-saver';
 import domtoimage from 'dom-to-image';
+import { InputContainer } from '../styling/styles';
 
 
 export default class Meme extends PureComponent {
@@ -42,12 +43,12 @@ export default class Meme extends PureComponent {
   render() {
     const { topText, bottomText, image } = this.state;
     return (
-      <>
-      <Display topText={topText} bottomText={bottomText} image={image} memeComplete={this.memeRef} handleChange={this.handleChange}/>
-      <ImageSelector handleImage={this.handleImage}/>
-      <TextSelector topText={topText} bottomText={bottomText} handleChange={this.handleChange}/>
-    <button onClick={this.saveMeme}>Save Meme</button>
-      </>
+      <InputContainer>
+        <Display topText={topText} bottomText={bottomText} image={image} memeComplete={this.memeRef} handleChange={this.handleChange}/>
+        <ImageSelector handleImage={this.handleImage}/>
+        <TextSelector topText={topText} bottomText={bottomText} handleChange={this.handleChange}/>
+        <button onClick={this.saveMeme}>Save Meme</button>
+      </InputContainer>
     );
   }
 }

@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { InputContainer, Label, Input } from '../styling/styles';
 
 export default function TextSelector({ topText, bottomText, handleChange }) {
   return (
-    <>
-    <label htmlFor="topText">Top text:</label>
-    <input name="topText" type="text" value={topText} onChange={handleChange}/>
+    <InputContainer>
+      <Label htmlFor="topText">Top text:</Label>
+      <Input name="topText" type="text" value={topText} onChange={handleChange}/>
+      <Label htmlFor="bottomText">Bottom text:</Label>
+      <Input name="bottomText" type="text" value={bottomText} onChange={handleChange}/>
 
-    <label htmlFor="bottomText">Bottom text:</label>
-    <input name="bottomText" type="text" value={bottomText} onChange={handleChange}/>
-
-    </>
+    </InputContainer>
   );
 }
 
