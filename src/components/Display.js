@@ -14,7 +14,7 @@ export default function Display({ topText, image, bottomText, textColor, memeCom
         </TopText>
         <img src={image}/>
         <BottomText>
-          <MemeSpan>{bottomText}</MemeSpan>
+          <MemeSpan textColor={textColor}>{bottomText}</MemeSpan>
         </BottomText>
       </MemeDiv>
     </Container>

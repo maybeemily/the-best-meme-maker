@@ -11,9 +11,6 @@ export default function TextSelector({ topText, bottomText, textColor, handleCha
       <Input name="bottomText" type="text" value={bottomText} onChange={handleChange}/>
       <Label htmlFor="textColor">Text color:</Label>
       <Input name="textColor" type="color" value={textColor} onChange={handleChange}/>
-      {/* <select>
-        <option value={}/>
-      </select> */}
     </InputContainer>
   );
 }
