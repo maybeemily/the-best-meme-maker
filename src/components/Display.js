@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IntroP, Container, MemeDiv, TopText, BottomText } from '../styling/styles';
-export default function Display({ topText, image, bottomText, memeComplete }) {
+import { IntroP, Container, MemeDiv, TopText, BottomText, MemeSpan } from '../styling/styles';
+export default function Display({ topText, image, bottomText, textColor, memeComplete }) {
   return (
     <>
     <IntroP>Make your own meme, advice animal, picture with text... whatever you want to call it.<br/> 
@@ -10,11 +10,11 @@ export default function Display({ topText, image, bottomText, memeComplete }) {
     <Container>
       <MemeDiv ref={memeComplete}>
         <TopText>
-          <span>{topText}</span>
+          <MemeSpan textColor={textColor}>{topText}</MemeSpan>
         </TopText>
         <img src={image}/>
         <BottomText>
-          <span>{bottomText}</span>
+          <MemeSpan>{bottomText}</MemeSpan>
         </BottomText>
       </MemeDiv>
     </Container>
@@ -25,6 +25,7 @@ export default function Display({ topText, image, bottomText, memeComplete }) {
 Display.propTypes = {
   topText: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
+  textColor: PropTypes.string.isRequired,
   bottomText: PropTypes.string.isRequired,
   memeComplete: PropTypes.object.isRequired
 };

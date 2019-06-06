@@ -11,19 +11,18 @@ export const IntroP = styled.p`
 export const Container = styled.div`
   display: flex;
   justify-content: center;
-  
-  span {
-    font-size: 3em;
-    text-transform: uppercase;
-    font-family: sans-serif;
-    color: white;
-    font-weight: 900;
-  }
 
   img {
     max-width: 400px;
   }
 `;
+
+export const MemeSpan = styled.span`
+    font-size: 3em;
+    font-family: ${props => props.font || 'sans-serif' };
+    color: ${props => props.textColor || 'white' };
+`;
+
 
 export const MemeDiv = styled.div`
   position: relative;

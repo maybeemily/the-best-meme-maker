@@ -11,7 +11,8 @@ export default class Meme extends PureComponent {
   state ={ 
     topText: '',
     bottomText: '',
-    image: ''
+    image: '',
+    textColor: '#ffffff'
   }
 
   memeRef = React.createRef();
@@ -41,12 +42,12 @@ export default class Meme extends PureComponent {
   }
 
   render() {
-    const { topText, bottomText, image } = this.state;
+    const { topText, bottomText, textColor, image } = this.state;
     return (
       <InputContainer>
-        <Display topText={topText} bottomText={bottomText} image={image} memeComplete={this.memeRef} handleChange={this.handleChange}/>
+        <Display topText={topText} bottomText={bottomText} image={image} textColor={textColor} memeComplete={this.memeRef} handleChange={this.handleChange}/>
         <ImageSelector handleImage={this.handleImage}/>
-        <TextSelector topText={topText} bottomText={bottomText} handleChange={this.handleChange}/>
+        <TextSelector topText={topText} bottomText={bottomText} textColor={textColor} handleChange={this.handleChange}/>
         <button onClick={this.saveMeme}>Save Meme</button>
       </InputContainer>
     );
