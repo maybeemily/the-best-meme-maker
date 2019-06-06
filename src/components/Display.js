@@ -1,24 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './Display.css';
-
+import { IntroP, Container, MemeDiv, TopText, BottomText } from '../styling/styles';
 export default function Display({ topText, image, bottomText, memeComplete }) {
   return (
     <>
-    <p className={styles.introP}>Make your own meme, advice animal, picture with text... whatever you want to call it. 
-      Paste the URL of the image you&apos;d like to use, type the words you want, and save! 
-      You can download your creation, or add it to our gallery.</p>
-    <div className={styles.container}>
-      <div className={styles.memeDiv} ref={memeComplete}>
-        <div className={styles.top}>
+    <IntroP>Make your own meme, advice animal, picture with text... whatever you want to call it.<br/> 
+      Upload a photo from your computer, type the words you want, and save!<br/> 
+      Also, you can add your creation to our gallery!</IntroP>
+    <Container>
+      <MemeDiv ref={memeComplete}>
+        <TopText>
           <span>{topText}</span>
-        </div>
+        </TopText>
         <img src={image}/>
-        <div className={styles.bottom}>
+        <BottomText>
           <span>{bottomText}</span>
-        </div>
-      </div>
-    </div>
+        </BottomText>
+      </MemeDiv>
+    </Container>
     </>
   );
 }
