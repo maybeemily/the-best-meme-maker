@@ -21,6 +21,7 @@ export const MemeSpan = styled.span`
     font-size: 3em;
     font-family: ${props => props.font || 'sans-serif' };
     color: ${props => props.textColor || 'white' };
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 `;
 
 
@@ -59,6 +60,13 @@ export const InputContainer = styled.div`
 `;
 
 export const Input = styled.input`
+  font-family: 'Noto Sans HK', sans-serif;
+  margin-bottom: 2rem;
+  margin-right: 1rem;
+  margin-left: .5rem;
+`;
+
+export const Select = styled.select`
   font-family: 'Noto Sans HK', sans-serif;
   margin-bottom: 2rem;
   margin-right: 1rem;

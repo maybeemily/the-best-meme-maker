@@ -1,7 +1,7 @@
 export const postMeme = image => {
   return fetch('http://ec2-3-17-9-198.us-east-2.compute.amazonaws.com:5000/api/v1/memes/', {
     method: 'POST',
-    body: JSON.stringify(image),
+    body: JSON.stringify({ image: image }),
     headers: {
       'Content-Type': 'application/json'
     }
