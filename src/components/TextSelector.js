@@ -9,6 +9,7 @@ export default function TextSelector({ topText, bottomText, textColor, font, han
       <Input name="topText" type="text" value={topText} onChange={handleChange}/>
       <Label htmlFor="bottomText">Bottom text:</Label>
       <Input name="bottomText" type="text" value={bottomText} onChange={handleChange}/>
+      <br/>
       <Label htmlFor="textColor">Text color:</Label>
       <Input name="textColor" type="color" value={textColor} onChange={handleChange}/>
       <Label htmlFor="font">Font:</Label>
