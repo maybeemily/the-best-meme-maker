@@ -22,6 +22,7 @@ export const MemeSpan = styled.span`
     font-family: ${props => props.font || 'sans-serif' };
     color: ${props => props.textColor || 'white' };
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    letter-spacing: .06em;
 `;
 
 

@@ -13,7 +13,7 @@ export default function TextSelector({ topText, bottomText, textColor, font, han
       <Input name="textColor" type="color" value={textColor} onChange={handleChange}/>
       <Label htmlFor="font">Font:</Label>
       <Select name="font" value={font} onChange={handleChange}>
-        <option value="sans-serif">*select one*</option>
+        <option value="Impact">*select one*</option>
         <option value="Open Sans">Sans Serif</option>
         <option value="Martel">Serif</option>
         <option value="Berkshire Swash">Fancy</option>
