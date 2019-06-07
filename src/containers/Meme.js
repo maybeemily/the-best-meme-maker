@@ -46,7 +46,25 @@ export default class Meme extends PureComponent {
     domtoimage.toPng(this.memeRef.current)
       .then(img => {
         postMeme(img);
+      })
+      .then(() => {
+        this.setState({ topText: 'Added to db!',
+          bottomText: '',
+          image: '',
+          textColor: '#000000',
+          font: 'sans-serif' });
       });
+  }
+
+  startOver = event => {
+    event.preventDefault();
+    this.setState({
+      topText: '',
+      bottomText: '',
+      image: '',
+      textColor: '#ffffff',
+      font: 'sans-serif'
+    });
   }
 
   render() {
@@ -58,6 +76,7 @@ export default class Meme extends PureComponent {
         <TextSelector topText={topText} bottomText={bottomText} textColor={textColor} font={font} handleChange={this.handleChange}/>
         <button onClick={this.saveMeme}>Save Meme to Computer</button>
         <button onClick={this.saveMemeToDb}>Save to Meme to Database</button>
+        <button onClick={this.startOver}>Start Over</button>
       </InputContainer>
     );
   }

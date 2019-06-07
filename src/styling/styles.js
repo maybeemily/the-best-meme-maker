@@ -30,6 +30,9 @@ export const MemeDiv = styled.div`
   position: relative;
   text-align: center;
   width: 400px;
+  min-height: 100px;
+  background-color: white;
+
 `;
 
 export const TopText = styled.div`
