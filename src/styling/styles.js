@@ -31,10 +31,10 @@ export const Container = styled.div`
 `;
 
 export const MemeSpan = styled.span`
-    font-size: 3em;
     font-family: ${props => props.font || 'sans-serif' };
     color: ${props => props.textColor || 'white' };
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-size: ${props => props.fontSize || '3em' };
     letter-spacing: .06em;
 `;
 
@@ -44,6 +44,7 @@ export const MemeDiv = styled.div`
   width: 400px;
   min-height: 100px;
   background-color: white;
+  overflow: hidden;
 
 `;
 

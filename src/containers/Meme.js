@@ -14,6 +14,7 @@ export default class Meme extends PureComponent {
     bottomText: '',
     image: '',
     textColor: '#ffffff',
+    fontSize: '3em',
     font: 'sans-serif'
   }
 
@@ -52,7 +53,8 @@ export default class Meme extends PureComponent {
           bottomText: '',
           image: '',
           textColor: '#000000',
-          font: 'sans-serif' });
+          font: 'sans-serif',
+          fontSize: '3em' });
       });
   }
 
@@ -63,17 +65,18 @@ export default class Meme extends PureComponent {
       bottomText: '',
       image: '',
       textColor: '#ffffff',
-      font: 'sans-serif'
+      font: 'sans-serif',
+      fontSize: '3em'
     });
   }
 
   render() {
-    const { topText, bottomText, textColor, image, font } = this.state;
+    const { topText, bottomText, textColor, image, font, fontSize } = this.state;
     return (
       <InputContainer>
-        <Display topText={topText} bottomText={bottomText} image={image} font={font} textColor={textColor} memeComplete={this.memeRef} handleChange={this.handleChange}/>
+        <Display topText={topText} bottomText={bottomText} image={image} font={font} fontSize={fontSize} textColor={textColor} memeComplete={this.memeRef} handleChange={this.handleChange}/>
         <ImageSelector handleImage={this.handleImage}/>
-        <TextSelector topText={topText} bottomText={bottomText} textColor={textColor} font={font} handleChange={this.handleChange}/>
+        <TextSelector topText={topText} bottomText={bottomText} textColor={textColor} fontSize={fontSize} font={font} handleChange={this.handleChange}/>
         <button onClick={this.saveMeme}>Save Meme to Computer</button>
         <button onClick={this.saveMemeToDb}>Save to Meme to Database</button>
         <button onClick={this.startOver}>Start Over</button>
