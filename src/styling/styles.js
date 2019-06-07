@@ -9,7 +9,7 @@ export const H1 = styled.h1`
   background-color: #ff00a1;
   padding: 5vh;
   margin-bottom: 5vh;
-  background-image: url('./src/sparkle-transparent-shine.gif');
+  background-image: url('http://infinityforever.com/assets/sparkle-transparent-shine.gif');
   background-repeat: repeat;
   background-size: 135px;
 `;
