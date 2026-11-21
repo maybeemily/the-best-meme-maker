@@ -60,15 +60,21 @@ export default function Meme() {
     const size = exportSize(naturalWidth, naturalHeight);
     const width = size.width || node.offsetWidth;
     const height = size.height || node.offsetHeight;
-    domtoimage.toPng(node, {
+    domtoimage.toBlob(node, {
       width,
       height,
       style: { transform: `scale(${width / node.offsetWidth}, ${height / node.offsetHeight})`, transformOrigin: 'top left' }
-    }).then(png => {
+    }).then(blob => {
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = png;
+      link.href = url;
       link.download = memedName(photo.name);
+      document.body.append(link);
       link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }).catch(() => {
+      setError('Sorry, your meme couldn\'t be saved. Try a smaller image.');
     });
   };
 

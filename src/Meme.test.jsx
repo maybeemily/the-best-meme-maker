@@ -4,7 +4,7 @@ import domtoimage from 'dom-to-image';
 import Meme from './Meme';
 
 vi.mock('dom-to-image', () => ({
-  default: { toPng: vi.fn() }
+  default: { toBlob: vi.fn() }
 }));
 
 const field = (container, name) => container.querySelector(`[name="${name}"]`);
@@ -193,11 +193,18 @@ describe('Meme: editing', () => {
 });
 
 describe('Meme: saving', () => {
+  const blob = new Blob(['png-bytes'], { type: 'image/png' });
+
+  beforeEach(() => {
+    URL.createObjectURL = vi.fn(() => 'blob:fake-url');
+    URL.revokeObjectURL = vi.fn();
+  });
+
   const saveAndGetLink = async() => {
-    domtoimage.toPng.mockResolvedValue('data:image/png;base64,AAAA');
+    domtoimage.toBlob.mockResolvedValue(blob);
     const links = [];
     const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function() {
-      links.push({ download: this.download, href: this.href });
+      links.push({ download: this.download, href: this.href, attached: this.isConnected });
     });
     fireEvent.click(screen.getByText('Save Meme to Computer'));
     await waitFor(() => expect(click).toHaveBeenCalledTimes(1));
@@ -205,12 +212,14 @@ describe('Meme: saving', () => {
     return links[0];
   };
 
-  it('downloads memed-<name>.png, swapping the original extension for png', async() => {
+  it('downloads memed-<name>.png from a blob, swapping the original extension for png', async() => {
     const { container } = render(<Meme />);
     await uploadImage(container, makeFile('my.cat.jpg', 'image/jpeg'));
     const link = await saveAndGetLink();
-    expect(domtoimage.toPng).toHaveBeenCalledTimes(1);
-    expect(link).toEqual({ download: 'memed-my.cat.png', href: 'data:image/png;base64,AAAA' });
+    expect(domtoimage.toBlob).toHaveBeenCalledTimes(1);
+    expect(URL.createObjectURL).toHaveBeenCalledWith(blob);
+    expect(link).toEqual({ download: 'memed-my.cat.png', href: 'blob:fake-url', attached: true });
+    expect(document.querySelector('a[download]')).toBeNull();
   });
 
   it('renders the meme at the original image resolution', async() => {
@@ -225,7 +234,7 @@ describe('Meme: saving', () => {
 
     await saveAndGetLink();
 
-    expect(domtoimage.toPng).toHaveBeenCalledWith(node, {
+    expect(domtoimage.toBlob).toHaveBeenCalledWith(node, {
       width: 1200,
       height: 1800,
       style: { transform: 'scale(4, 4)', transformOrigin: 'top left' }
@@ -239,5 +248,16 @@ describe('Meme: saving', () => {
     await waitFor(() => expect(previewSrc(container)).toMatch(/^data:image\/webp/));
     const link = await saveAndGetLink();
     expect(link.download).toBe('memed-second.png');
+  });
+
+  it('shows an error instead of failing silently when the image cannot be rendered', async() => {
+    const { container } = render(<Meme />);
+    await uploadImage(container);
+    domtoimage.toBlob.mockRejectedValue(new Error('canvas too big'));
+
+    fireEvent.click(screen.getByText('Save Meme to Computer'));
+
+    expect((await screen.findByRole('alert')).textContent).toContain('couldn\'t be saved');
+    expect(URL.createObjectURL).not.toHaveBeenCalled();
   });
 });
