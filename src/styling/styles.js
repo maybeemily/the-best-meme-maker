@@ -164,12 +164,20 @@ export const Input = styled.input`
   }
 `;
 
+// The browser draws a select's arrow itself and won't let it be moved, so we
+// draw our own chevron and place it 10px from the right edge.
+const chevron = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' fill=\'none\' stroke=\'%23333\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E")';
+
 export const Select = styled.select`
   font-family: 'Noto Sans HK', sans-serif;
   box-sizing: border-box;
   width: 100%;
   margin: 0;
-  padding: .4rem;
+  padding: .4rem 2rem .4rem .4rem;
+  appearance: none;
+  background: white ${chevron} no-repeat right 5px center;
+  border: 1px solid #767676;
+  border-radius: 2px;
 `;
 
 export const HiddenFileInput = styled.input`
