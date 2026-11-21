@@ -5,8 +5,7 @@ export default function Display({ topText, image, bottomText, textColor, font, f
   return (
     <>
     <IntroP>Make your own meme, advice animal, picture with text... whatever you want to call it.<br/> 
-      Upload a photo from your computer, type the words you want, and save!<br/> 
-      Save your creation to your computer, or add it to our meme database!</IntroP>
+      Upload a photo from your computer, type the words you want, and save!</IntroP>
     <Container>
       <MemeDiv ref={memeComplete}>
         <TopText>
