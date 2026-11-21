@@ -5,7 +5,6 @@ import ImageSelector from '../components/ImageSelector';
 import { saveAs } from 'file-saver';
 import domtoimage from 'dom-to-image';
 import { InputContainer } from '../styling/styles';
-import { postMeme } from '../services/memeApi';
 
 
 export default class Meme extends PureComponent {
@@ -42,22 +41,6 @@ export default class Meme extends PureComponent {
       });
   }
 
-  saveMemeToDb = event => {
-    event.preventDefault();
-    domtoimage.toPng(this.memeRef.current)
-      .then(img => {
-        postMeme(img);
-      })
-      .then(() => {
-        this.setState({ topText: 'Added to db!',
-          bottomText: '',
-          image: '',
-          textColor: '#000000',
-          font: 'sans-serif',
-          fontSize: '3em' });
-      });
-  }
-
   startOver = event => {
     event.preventDefault();
     this.setState({
@@ -78,7 +61,6 @@ export default class Meme extends PureComponent {
         <ImageSelector handleImage={this.handleImage}/>
         <TextSelector topText={topText} bottomText={bottomText} textColor={textColor} fontSize={fontSize} font={font} handleChange={this.handleChange}/>
         <button onClick={this.saveMeme}>Save Meme to Computer</button>
-        <button onClick={this.saveMemeToDb}>Save to Meme to Database</button>
         <button onClick={this.startOver}>Start Over</button>
       </InputContainer>
     );
