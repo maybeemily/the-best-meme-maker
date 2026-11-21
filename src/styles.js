@@ -1,25 +1,22 @@
 import styled, { css } from 'styled-components';
-import sparkle from '../assets/sparkle-transparent-shine.gif';
+import sparkle from './assets/sparkle-transparent-shine.gif';
 
-/*/styles for Header.js/*/
+const pink = '#ff00a1';
 
 export const H1 = styled.h1`
   text-align: center;
   letter-spacing: .5em;
   color: white;
-  background-color: #ff00a1;
+  background-color: ${pink};
   padding: 5vh;
   margin-bottom: 5vh;
   background-image: url(${sparkle});
-  background-repeat: repeat;
   background-size: 135px;
 `;
 
-/*/styles for Display.js/*/
-
 export const IntroP = styled.p`
   text-align: center;
-  margin-bottom: 5vh;;
+  margin-bottom: 5vh;
 `;
 
 export const ErrorMessage = styled.p`
@@ -48,6 +45,8 @@ export const Layout = styled.div`
   }
 `;
 
+/*/ left column: the upload box, then the meme once an image is chosen /*/
+
 export const Stage = styled.div`
   box-sizing: border-box;
   flex: none;
@@ -57,7 +56,7 @@ export const Stage = styled.div`
   width: 375px;
   max-width: 100%;
   height: 400px;
-  outline: ${props => props.$dragging ? '3px dashed #ff00a1' : 'none'};
+  outline: ${props => props.$dragging ? `3px dashed ${pink}` : 'none'};
   outline-offset: 4px;
 
   img {
@@ -71,7 +70,7 @@ export const DropBox = styled.label`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  border: 2px solid #ff00a1;
+  border: 2px solid ${pink};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,53 +86,38 @@ export const DropBox = styled.label`
 export const UploadPill = styled.span`
   font-weight: bold;
   color: white;
-  background-color: #ff00a1;
+  background-color: ${pink};
   padding: .6rem 1.2rem;
   border-radius: 999px;
 `;
 
-export const MemeSpan = styled.span`
-    font-family: ${props => props.$font || 'sans-serif' };
-    color: ${props => props.$textColor || 'white' };
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    font-size: ${props => props.$fontSize || '3em' };
-    letter-spacing: .06em;
-`;
-
+// Text color, font and size are set on this element, and the captions inherit them.
 export const MemeDiv = styled.div`
   position: relative;
   text-align: center;
   width: fit-content;
   max-width: 100%;
   overflow: hidden;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  letter-spacing: .06em;
 `;
 
-export const TopText = styled.div`
+export const Caption = styled.div`
   position: absolute;
   overflow: auto;
-  top: 0;
+  ${props => props.$bottom ? 'bottom: 0;' : 'top: 0;'}
   left: 0;
   right: 0;
   padding: 5px;
 `;
 
-export const BottomText = styled.div`
-  position: absolute;
-  overflow: auto;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 5px;
-`;
-
-/*/styles for the controls column/*/
+/*/ right column: the controls /*/
 
 export const Controls = styled.div`
   flex: 1 1 auto;
   width: 100%;
   max-width: 420px;
   text-align: left;
-  font-family: 'Noto Sans HK', sans-serif;
 `;
 
 export const Fields = styled.div`
@@ -144,20 +128,13 @@ export const Fields = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-export const Label = styled.label`
-  font-family: 'Noto Sans HK', sans-serif;
-  text-align: left;
-`;
-
 // One look for every form box: text inputs, the color picker and the dropdowns.
 const formBox = css`
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   height: 2.5rem;
-  margin: 0;
   padding: 0 .6rem;
-  font-family: 'Noto Sans HK', sans-serif;
   font-size: 1rem;
   color: #222;
   background-color: white;
@@ -211,7 +188,7 @@ export const HiddenFileInput = styled.input`
   white-space: nowrap;
 
   &:focus-visible + * {
-    outline: 3px solid #ff00a1;
+    outline: 3px solid ${pink};
     outline-offset: 2px;
   }
 `;
@@ -219,7 +196,7 @@ export const HiddenFileInput = styled.input`
 export const ChangeImage = styled.label`
   display: inline-block;
   margin-bottom: 1.5rem;
-  color: #ff00a1;
+  color: ${pink};
   font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
@@ -231,16 +208,14 @@ export const Buttons = styled.div`
 `;
 
 export const Button = styled.button`
-  font-family: 'Noto Sans HK', sans-serif;
   flex: 1;
   font-weight: bold;
-  margin: 0;
   padding: .7rem 1rem;
   border-radius: 6px;
-  border: 2px solid #ff00a1;
+  border: 2px solid ${pink};
   cursor: pointer;
-  color: ${props => props.$primary ? 'white' : '#ff00a1'};
-  background-color: ${props => props.$primary ? '#ff00a1' : 'transparent'};
+  color: ${props => props.$primary ? 'white' : pink};
+  background-color: ${props => props.$primary ? pink : 'transparent'};
 
   &:disabled {
     opacity: .4;
@@ -248,10 +223,7 @@ export const Button = styled.button`
   }
 `;
 
-/*/styles for Footer.js/*/
-
 export const InfoFooter = styled.footer`
-  font-family: 'Noto Sans HK', sans-serif;
   text-align: center;
   font-size: .5em;
   margin: 5vh;

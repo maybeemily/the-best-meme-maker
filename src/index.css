@@ -8,6 +8,6 @@ body {
   font-family: 'Noto Sans HK', sans-serif;
 }
 
-button {
-  margin: 1vh;
+input, select, button {
+  font-family: inherit;
 }

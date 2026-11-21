@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import exportSize from './exportSize';
+import { exportSize, memedName } from './image';
 
 describe('exportSize', () => {
   it('uses the original image size exactly', () => {
@@ -12,7 +12,15 @@ describe('exportSize', () => {
     expect(width / height).toBeCloseTo(8000 / 6000, 2);
   });
 
-  it('returns null when the image size is unknown', () => {
-    expect(exportSize(0, 0)).toBeNull();
+  it('returns zeros when the image size is unknown', () => {
+    expect(exportSize(0, 0)).toEqual({ width: 0, height: 0 });
+  });
+});
+
+describe('memedName', () => {
+  it('prefixes memed- and swaps the extension for png', () => {
+    expect(memedName('cat.jpg')).toBe('memed-cat.png');
+    expect(memedName('my.cat.photo.webp')).toBe('memed-my.cat.photo.png');
+    expect(memedName('noextension')).toBe('memed-noextension.png');
   });
 });

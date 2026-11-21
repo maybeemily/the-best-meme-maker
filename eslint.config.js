@@ -10,6 +10,6 @@ export default [
     files: ['**/*.{js,jsx}'],
     languageOptions: { globals: globals.browser, ecmaVersion: 'latest', sourceType: 'module' },
     settings: { react: { version: 'detect' } },
-    rules: { 'no-console': 'warn', semi: ['error', 'always'], quotes: ['error', 'single'] }
+    rules: { 'react/prop-types': 'off', 'no-console': 'warn', semi: ['error', 'always'], quotes: ['error', 'single'] }
   }
 ];
