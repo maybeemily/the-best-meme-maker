@@ -1,4 +1,3 @@
-import React from 'react';
 import { InfoFooter } from '../styling/styles';
 
 export default function Footer() {

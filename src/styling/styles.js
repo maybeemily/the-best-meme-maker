@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import sparkle from '../assets/sparkle-transparent-shine.gif';
 
 /*/styles for Header.js/*/
 
@@ -9,7 +10,7 @@ export const H1 = styled.h1`
   background-color: #ff00a1;
   padding: 5vh;
   margin-bottom: 5vh;
-  background-image: url('http://infinityforever.com/assets/sparkle-transparent-shine.gif');
+  background-image: url(${sparkle});
   background-repeat: repeat;
   background-size: 135px;
 `;
@@ -31,10 +32,10 @@ export const Container = styled.div`
 `;
 
 export const MemeSpan = styled.span`
-    font-family: ${props => props.font || 'sans-serif' };
-    color: ${props => props.textColor || 'white' };
+    font-family: ${props => props.$font || 'sans-serif' };
+    color: ${props => props.$textColor || 'white' };
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    font-size: ${props => props.fontSize || '3em' };
+    font-size: ${props => props.$fontSize || '3em' };
     letter-spacing: .06em;
 `;
 

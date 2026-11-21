@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { InputContainer, Label, Input, Select } from '../styling/styles';
 

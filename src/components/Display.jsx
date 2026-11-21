@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { IntroP, Container, MemeDiv, TopText, BottomText, MemeSpan } from '../styling/styles';
 
@@ -11,11 +10,11 @@ export default function Display({ topText, image, bottomText, textColor, font, f
     <Container>
       <MemeDiv ref={memeComplete}>
         <TopText>
-          <MemeSpan textColor={textColor} fontSize={fontSize} font={font}>{topText}</MemeSpan>
+          <MemeSpan $textColor={textColor} $fontSize={fontSize} $font={font}>{topText}</MemeSpan>
         </TopText>
         <img src={image}/>
         <BottomText>
-          <MemeSpan textColor={textColor} fontSize={fontSize} font={font}>{bottomText}</MemeSpan>
+          <MemeSpan $textColor={textColor} $fontSize={fontSize} $font={font}>{bottomText}</MemeSpan>
         </BottomText>
       </MemeDiv>
     </Container>

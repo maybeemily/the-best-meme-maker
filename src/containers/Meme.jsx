@@ -1,8 +1,7 @@
-import React, { PureComponent } from 'react';
+import { createRef, PureComponent } from 'react';
 import Display from '../components/Display';
 import TextSelector from '../components/TextSelector';
 import ImageSelector from '../components/ImageSelector';
-import { saveAs } from 'file-saver';
 import domtoimage from 'dom-to-image';
 import { InputContainer } from '../styling/styles';
 
@@ -15,14 +14,14 @@ export default class Meme extends PureComponent {
     textColor: '#ffffff',
     fontSize: '3em',
     font: 'sans-serif'
-  }
+  };
 
-  memeRef = React.createRef();
+  memeRef = createRef();
 
 
   handleChange = ({ target }) => {
     this.setState({ [target.name ] : target.value });
-  }
+  };
 
   handleImage = ({ target }) => {
     const reader = new FileReader();
@@ -30,16 +29,19 @@ export default class Meme extends PureComponent {
       this.setState({ image: event.target.result });
     };
     reader.readAsDataURL(target.files[0]);
-  }
+  };
   
   
   saveMeme = event => {
     event.preventDefault();
     domtoimage.toPng(this.memeRef.current)
       .then(img => {
-        saveAs(img);
+        const link = document.createElement('a');
+        link.href = img;
+        link.download = 'meme.png';
+        link.click();
       });
-  }
+  };
 
   startOver = event => {
     event.preventDefault();
@@ -51,7 +53,7 @@ export default class Meme extends PureComponent {
       font: 'sans-serif',
       fontSize: '3em'
     });
-  }
+  };
 
   render() {
     const { topText, bottomText, textColor, image, font, fontSize } = this.state;
