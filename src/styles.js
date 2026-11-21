@@ -45,8 +45,6 @@ export const Layout = styled.div`
   }
 `;
 
-/*/ left column: the upload box, then the meme once an image is chosen /*/
-
 export const Stage = styled.div`
   box-sizing: border-box;
   flex: none;
@@ -91,7 +89,6 @@ export const UploadPill = styled.span`
   border-radius: 999px;
 `;
 
-// Text color, font and size are set on this element, and the captions inherit them.
 export const MemeDiv = styled.div`
   position: relative;
   text-align: center;
@@ -111,8 +108,6 @@ export const Caption = styled.div`
   padding: 5px;
 `;
 
-/*/ right column: the controls /*/
-
 export const Controls = styled.div`
   flex: 1 1 auto;
   width: 100%;
@@ -128,7 +123,6 @@ export const Fields = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-// One look for every form box: text inputs, the color picker and the dropdowns.
 const formBox = css`
   box-sizing: border-box;
   width: 100%;
@@ -165,8 +159,6 @@ export const Input = styled.input`
   }
 `;
 
-// The browser draws a select's arrow itself and won't let it be moved, so we
-// draw our own chevron and place it 10px from the right edge.
 const chevron = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' fill=\'none\' stroke=\'%23333\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E")';
 
 export const Select = styled.select`

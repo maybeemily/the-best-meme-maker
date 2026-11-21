@@ -17,7 +17,7 @@ const defaultFields = {
 
 export default function Meme() {
   const [fields, setFields] = useState(defaultFields);
-  const [photo, setPhoto] = useState(null); // { src, name }
+  const [photo, setPhoto] = useState(null);
   const [error, setError] = useState('');
   const [dragging, setDragging] = useState(false);
   const memeRef = useRef();
@@ -54,7 +54,6 @@ export default function Meme() {
     loadImage(event.dataTransfer.files[0]);
   };
 
-  // Renders the meme scaled up (text included) so the file matches the original image size.
   const saveMeme = () => {
     const node = memeRef.current;
     const { naturalWidth, naturalHeight } = node.querySelector('img');
@@ -107,7 +106,6 @@ export default function Meme() {
           )}
         </Stage>
         <Controls>
-          {/* Visually hidden but keyboard-accessible; the labels around the page open it. */}
           <HiddenFileInput id="image" name="image" type="file" accept={IMAGE_TYPES.join(',')} onChange={handleFileInput}/>
           {photo && <ChangeImage htmlFor="image">Change image</ChangeImage>}
           <TextSelector fields={fields} onChange={handleChange}/>
