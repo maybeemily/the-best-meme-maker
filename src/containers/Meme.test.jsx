@@ -17,6 +17,13 @@ beforeEach(() => {
 });
 
 describe('Meme', () => {
+  it('connects every label to its form control', () => {
+    render(<Meme />);
+    ['Top text:', 'Bottom text:', 'Text color:', 'Font:', 'Text Size:', 'Image URL:'].forEach(label => {
+      expect(screen.getByLabelText(label)).toBeTruthy();
+    });
+  });
+
   it('shows typed top and bottom text on the meme', () => {
     const { container } = render(<Meme />);
     change(field(container, 'topText'), 'HELLO');
@@ -52,6 +59,7 @@ describe('Meme', () => {
     change(field(container, 'bottomText'), 'SOON');
     change(field(container, 'textColor'), '#ff0000');
     change(field(container, 'fontSize'), '9em');
+    change(field(container, 'font'), 'Impact');
     const file = new File(['pixels'], 'cat.png', { type: 'image/png' });
     fireEvent.change(field(container, 'image'), { target: { files: [file] } });
     await waitFor(() => expect(container.querySelector('img').getAttribute('src')).toBeTruthy());
@@ -64,6 +72,7 @@ describe('Meme', () => {
     expect(container.querySelector('img').getAttribute('src')).toBeFalsy();
     expect(field(container, 'textColor').value).toBe('#ffffff');
     expect(field(container, 'fontSize').value).toBe('3em');
+    expect(field(container, 'font').value).toBe('sans-serif');
   });
 
   it('downloads the meme as meme.png when saving', async () => {

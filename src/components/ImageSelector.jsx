@@ -5,7 +5,7 @@ export default function ImageSelector({ handleImage }) {
   return (
     <InputContainer>
       <Label htmlFor="image">Image URL:</Label>
-      <Input name="image" type="file" onChange={handleImage}/>
+      <Input id="image" name="image" type="file" onChange={handleImage}/>
     </InputContainer>
   );
 }
