@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
-import { InputContainer, Label, Input, Select } from '../styling/styles';
+import { Fields, Label, Input, Select } from '../styling/styles';
 
 export default function TextSelector({ topText, bottomText, textColor, font, fontSize, handleChange }) {
   return (
-    <InputContainer>
+    <Fields>
       <Label htmlFor="topText">Top text:</Label>
       <Input id="topText" name="topText" type="text" value={topText} onChange={handleChange}/>
       <Label htmlFor="bottomText">Bottom text:</Label>
       <Input id="bottomText" name="bottomText" type="text" value={bottomText} onChange={handleChange}/>
-      <br/>
       <Label htmlFor="textColor">Text color:</Label>
       <Input id="textColor" name="textColor" type="color" value={textColor} onChange={handleChange}/>
       <Label htmlFor="font">Font:</Label>
@@ -28,7 +27,7 @@ export default function TextSelector({ topText, bottomText, textColor, font, fon
         <option value="6em">big</option>
         <option value="9em">too big</option>
       </Select>
-    </InputContainer>
+    </Fields>
   );
 }
 

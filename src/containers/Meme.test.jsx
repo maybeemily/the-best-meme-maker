@@ -10,39 +10,77 @@ vi.mock('dom-to-image', () => ({
 const field = (container, name) => container.querySelector(`[name="${name}"]`);
 const change = (el, value) => fireEvent.change(el, { target: { value } });
 const spanStyle = text => getComputedStyle(screen.getByText(text));
+const makeFile = (name = 'cat.png', type = 'image/png') => new File(['pixels'], name, { type });
+
+const previewSrc = container => container.querySelector('img')?.getAttribute('src');
+
+const uploadImage = async(container, file = makeFile()) => {
+  fireEvent.change(field(container, 'image'), { target: { files: [file] } });
+  await waitFor(() => expect(previewSrc(container)).toMatch(/^data:/));
+};
+
+const dropFile = (target, file) => fireEvent.drop(target, { dataTransfer: { files: [file] } });
 
 beforeEach(() => {
   cleanup();
   vi.clearAllMocks();
 });
 
-describe('Meme', () => {
-  it('connects every label to its form control', () => {
+describe('Meme: empty state', () => {
+  it('shows the upload box with an upload button and a disabled Save', () => {
+    const { container } = render(<Meme />);
+    expect(screen.getByText('Upload image')).toBeTruthy();
+    expect(screen.getByLabelText(/upload image/i)).toBe(field(container, 'image'));
+    expect(container.querySelector('img')).toBeNull();
+    expect(screen.getByText('Save Meme to Computer').disabled).toBe(true);
+  });
+
+  it('connects every form label to its control', () => {
     render(<Meme />);
-    ['Top text:', 'Bottom text:', 'Text color:', 'Font:', 'Text Size:', 'Upload image:'].forEach(label => {
+    ['Top text:', 'Bottom text:', 'Text color:', 'Font:', 'Text Size:'].forEach(label => {
       expect(screen.getByLabelText(label)).toBeTruthy();
     });
   });
+});
 
-  it('shows typed top and bottom text on the meme', () => {
+describe('Meme: uploading', () => {
+  it('replaces the box with the meme preview when an image is chosen', async() => {
     const { container } = render(<Meme />);
+    await uploadImage(container);
+    expect(screen.queryByText('Upload image')).toBeNull();
+    expect(previewSrc(container)).toMatch(/^data:image\/png;base64,/);
+    expect(screen.getByText('Save Meme to Computer').disabled).toBe(false);
+    expect(screen.getByText('Change image')).toBeTruthy();
+  });
+
+  it('accepts an image dropped on the box', async() => {
+    const { container } = render(<Meme />);
+    dropFile(screen.getByText('Upload image').closest('label'), makeFile('dropped.gif', 'image/gif'));
+    await waitFor(() => expect(previewSrc(container)).toMatch(/^data:image\/gif;base64,/));
+  });
+
+  it('ignores dropped files that are not images', async() => {
+    const { container } = render(<Meme />);
+    dropFile(screen.getByText('Upload image').closest('label'), makeFile('notes.txt', 'text/plain'));
+    await new Promise(resolve => setTimeout(resolve, 50));
+    expect(container.querySelector('img')).toBeNull();
+    expect(screen.getByText('Upload image')).toBeTruthy();
+  });
+});
+
+describe('Meme: editing', () => {
+  it('shows typed top and bottom text on the meme', async() => {
+    const { container } = render(<Meme />);
+    await uploadImage(container);
     change(field(container, 'topText'), 'HELLO');
     change(field(container, 'bottomText'), 'WORLD');
     expect(screen.getByText('HELLO')).toBeTruthy();
     expect(screen.getByText('WORLD')).toBeTruthy();
   });
 
-  it('shows an uploaded image in the meme preview', async () => {
+  it('applies color, font and size changes to the meme text', async() => {
     const { container } = render(<Meme />);
-    const file = new File(['pixels'], 'cat.png', { type: 'image/png' });
-    fireEvent.change(field(container, 'image'), { target: { files: [file] } });
-    await waitFor(() => {
-      expect(container.querySelector('img').getAttribute('src')).toMatch(/^data:image\/png;base64,/);
-    });
-  });
-
-  it('applies color, font and size changes to the meme text', () => {
-    const { container } = render(<Meme />);
+    await uploadImage(container);
     change(field(container, 'topText'), 'STYLE ME');
     change(field(container, 'textColor'), '#ff0000');
     change(field(container, 'font'), 'Martel');
@@ -53,40 +91,55 @@ describe('Meme', () => {
     expect(style.fontSize).toBe('6em');
   });
 
-  it('clears everything and restores default styling on Start Over', async () => {
+  it('clears everything, brings back the box and restores defaults on Start Over', async() => {
     const { container } = render(<Meme />);
+    await uploadImage(container);
     change(field(container, 'topText'), 'GONE');
     change(field(container, 'bottomText'), 'SOON');
     change(field(container, 'textColor'), '#ff0000');
     change(field(container, 'fontSize'), '9em');
     change(field(container, 'font'), 'Impact');
-    const file = new File(['pixels'], 'cat.png', { type: 'image/png' });
-    fireEvent.change(field(container, 'image'), { target: { files: [file] } });
-    await waitFor(() => expect(container.querySelector('img').getAttribute('src')).toBeTruthy());
 
     fireEvent.click(screen.getByText('Start Over'));
 
     expect(field(container, 'topText').value).toBe('');
     expect(field(container, 'bottomText').value).toBe('');
     expect(screen.queryByText('GONE')).toBeNull();
-    expect(container.querySelector('img').getAttribute('src')).toBeFalsy();
+    expect(container.querySelector('img')).toBeNull();
+    expect(screen.getByText('Upload image')).toBeTruthy();
     expect(field(container, 'textColor').value).toBe('#ffffff');
     expect(field(container, 'fontSize').value).toBe('3em');
     expect(field(container, 'font').value).toBe('sans-serif');
   });
+});
 
-  it('downloads the meme as meme.png when saving', async () => {
+describe('Meme: saving', () => {
+  const saveAndGetLink = async() => {
     domtoimage.toPng.mockResolvedValue('data:image/png;base64,AAAA');
+    const links = [];
     const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function() {
-      click.lastLink = { download: this.download, href: this.href };
+      links.push({ download: this.download, href: this.href });
     });
-    render(<Meme />);
-
     fireEvent.click(screen.getByText('Save Meme to Computer'));
-
     await waitFor(() => expect(click).toHaveBeenCalledTimes(1));
-    expect(domtoimage.toPng).toHaveBeenCalledTimes(1);
-    expect(click.lastLink).toEqual({ download: 'meme.png', href: 'data:image/png;base64,AAAA' });
     click.mockRestore();
+    return links[0];
+  };
+
+  it('downloads memed-<name>.png, swapping the original extension for png', async() => {
+    const { container } = render(<Meme />);
+    await uploadImage(container, makeFile('my.cat.jpg', 'image/jpeg'));
+    const link = await saveAndGetLink();
+    expect(domtoimage.toPng).toHaveBeenCalledTimes(1);
+    expect(link).toEqual({ download: 'memed-my.cat.png', href: 'data:image/png;base64,AAAA' });
+  });
+
+  it('uses the name of the most recently uploaded file', async() => {
+    const { container } = render(<Meme />);
+    await uploadImage(container, makeFile('first.png'));
+    dropFile(container.querySelector('img').closest('div').parentElement, makeFile('second.webp', 'image/webp'));
+    await waitFor(() => expect(previewSrc(container)).toMatch(/^data:image\/webp/));
+    const link = await saveAndGetLink();
+    expect(link.download).toBe('memed-second.png');
   });
 });

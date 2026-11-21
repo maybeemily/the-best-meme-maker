@@ -3,68 +3,109 @@ import Display from '../components/Display';
 import TextSelector from '../components/TextSelector';
 import ImageSelector from '../components/ImageSelector';
 import domtoimage from 'dom-to-image';
-import { InputContainer } from '../styling/styles';
+import { IntroP, Layout, Stage, DropBox, UploadPill, Controls, Buttons, Button } from '../styling/styles';
 
+const initialState = {
+  topText: '',
+  bottomText: '',
+  image: '',
+  fileName: '',
+  textColor: '#ffffff',
+  fontSize: '3em',
+  font: 'sans-serif',
+  dragging: false
+};
+
+// "cat.photo.jpg" -> "memed-cat.photo.png" (the export is always a PNG)
+const memedName = fileName => `memed-${fileName.replace(/\.[^.]*$/, '')}.png`;
 
 export default class Meme extends PureComponent {
-  state ={ 
-    topText: '',
-    bottomText: '',
-    image: '',
-    textColor: '#ffffff',
-    fontSize: '3em',
-    font: 'sans-serif'
-  };
+  state = { ...initialState };
 
   memeRef = createRef();
 
-
   handleChange = ({ target }) => {
-    this.setState({ [target.name ] : target.value });
+    this.setState({ [target.name]: target.value });
+  };
+
+  loadImage = file => {
+    if(!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = event => {
+      this.setState({ image: event.target.result, fileName: file.name });
+    };
+    reader.readAsDataURL(file);
   };
 
   handleImage = ({ target }) => {
-    const reader = new FileReader();
-    reader.onload = event => {
-      this.setState({ image: event.target.result });
-    };
-    reader.readAsDataURL(target.files[0]);
+    this.loadImage(target.files[0]);
+    target.value = '';
   };
-  
-  
+
+  handleDragOver = event => {
+    event.preventDefault();
+    if(!this.state.dragging) this.setState({ dragging: true });
+  };
+
+  handleDragLeave = () => {
+    this.setState({ dragging: false });
+  };
+
+  handleDrop = event => {
+    event.preventDefault();
+    this.setState({ dragging: false });
+    this.loadImage(event.dataTransfer.files[0]);
+  };
+
   saveMeme = event => {
     event.preventDefault();
+    const { fileName } = this.state;
     domtoimage.toPng(this.memeRef.current)
       .then(img => {
         const link = document.createElement('a');
         link.href = img;
-        link.download = 'meme.png';
+        link.download = memedName(fileName);
         link.click();
       });
   };
 
   startOver = event => {
     event.preventDefault();
-    this.setState({
-      topText: '',
-      bottomText: '',
-      image: '',
-      textColor: '#ffffff',
-      font: 'sans-serif',
-      fontSize: '3em'
-    });
+    this.setState({ ...initialState });
   };
 
   render() {
-    const { topText, bottomText, textColor, image, font, fontSize } = this.state;
+    const { topText, bottomText, textColor, image, font, fontSize, dragging } = this.state;
     return (
-      <InputContainer>
-        <Display topText={topText} bottomText={bottomText} image={image} font={font} fontSize={fontSize} textColor={textColor} memeComplete={this.memeRef} handleChange={this.handleChange}/>
-        <ImageSelector handleImage={this.handleImage}/>
-        <TextSelector topText={topText} bottomText={bottomText} textColor={textColor} fontSize={fontSize} font={font} handleChange={this.handleChange}/>
-        <button onClick={this.saveMeme}>Save Meme to Computer</button>
-        <button onClick={this.startOver}>Start Over</button>
-      </InputContainer>
+      <>
+        <IntroP>Make your own meme, advice animal, picture with text... whatever you want to call it.<br/>
+          Upload a photo from your computer, type the words you want, and save!</IntroP>
+        <Layout>
+          <Stage
+            $dragging={dragging}
+            onDragOver={this.handleDragOver}
+            onDragLeave={this.handleDragLeave}
+            onDrop={this.handleDrop}
+          >
+            {image ? (
+              <Display topText={topText} bottomText={bottomText} image={image} font={font} fontSize={fontSize} textColor={textColor} memeComplete={this.memeRef}/>
+            ) : (
+              <DropBox htmlFor="image" $dragging={dragging}>
+                <span>Drag an image here, or click anywhere in this box</span>
+                <UploadPill>Upload image</UploadPill>
+              </DropBox>
+            )}
+          </Stage>
+          <Controls>
+            <ImageSelector hasImage={!!image} handleImage={this.handleImage}/>
+            <TextSelector topText={topText} bottomText={bottomText} textColor={textColor} fontSize={fontSize} font={font} handleChange={this.handleChange}/>
+            <Buttons>
+              <Button $primary onClick={this.saveMeme} disabled={!image}>Save Meme to Computer</Button>
+              <Button onClick={this.startOver}>Start Over</Button>
+            </Buttons>
+          </Controls>
+        </Layout>
+      </>
     );
   }
 }

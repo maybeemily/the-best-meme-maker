@@ -22,13 +22,62 @@ export const IntroP = styled.p`
   margin-bottom: 5vh;;
 `;
 
-export const Container = styled.div`
+export const Layout = styled.div`
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  gap: 3rem;
+  padding: 0 16px;
+
+  @media (max-width: 760px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+`;
+
+export const Stage = styled.div`
+  box-sizing: border-box;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 375px;
+  max-width: 100%;
+  height: 400px;
+  outline: ${props => props.$dragging ? '3px dashed #ff00a1' : 'none'};
+  outline-offset: 4px;
 
   img {
-    max-width: 400px;
+    display: block;
+    max-width: 100%;
+    max-height: 400px;
   }
+`;
+
+export const DropBox = styled.label`
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ff00a1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+  cursor: pointer;
+  background-color: ${props => props.$dragging ? 'rgba(255, 0, 161, .08)' : 'transparent'};
+`;
+
+export const UploadPill = styled.span`
+  font-weight: bold;
+  color: white;
+  background-color: #ff00a1;
+  padding: .6rem 1.2rem;
+  border-radius: 999px;
 `;
 
 export const MemeSpan = styled.span`
@@ -42,11 +91,9 @@ export const MemeSpan = styled.span`
 export const MemeDiv = styled.div`
   position: relative;
   text-align: center;
-  width: 400px;
-  min-height: 100px;
-  background-color: white;
+  width: fit-content;
+  max-width: 100%;
   overflow: hidden;
-
 `;
 
 export const TopText = styled.div`
@@ -67,28 +114,95 @@ export const BottomText = styled.div`
   padding: 5px;
 `;
 
-/*/styles for TextSelector.js and ImageSelector.js/*/
+/*/styles for the controls column/*/
 
-export const Label = styled.label`
+export const Controls = styled.div`
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 420px;
   font-family: 'Noto Sans HK', sans-serif;
 `;
 
-export const InputContainer = styled.div`
-  text-align: center;
+export const Fields = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+`;
+
+export const Label = styled.label`
+  font-family: 'Noto Sans HK', sans-serif;
+  text-align: right;
 `;
 
 export const Input = styled.input`
   font-family: 'Noto Sans HK', sans-serif;
-  margin-bottom: 2rem;
-  margin-right: 1rem;
-  margin-left: .5rem;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: .4rem;
+
+  &[type='color'] {
+    width: 4rem;
+    height: 2.2rem;
+    padding: 2px;
+  }
 `;
 
 export const Select = styled.select`
   font-family: 'Noto Sans HK', sans-serif;
-  margin-bottom: 2rem;
-  margin-right: 1rem;
-  margin-left: .5rem;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: .4rem;
+`;
+
+export const HiddenFileInput = styled.input`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+
+  &:focus-visible + * {
+    outline: 3px solid #ff00a1;
+    outline-offset: 2px;
+  }
+`;
+
+export const ChangeImage = styled.label`
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: #ff00a1;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
+export const Buttons = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+export const Button = styled.button`
+  font-family: 'Noto Sans HK', sans-serif;
+  font-weight: bold;
+  margin: 0;
+  padding: .7rem 1.4rem;
+  border-radius: 6px;
+  border: 2px solid #ff00a1;
+  cursor: pointer;
+  color: ${props => props.$primary ? 'white' : '#ff00a1'};
+  background-color: ${props => props.$primary ? '#ff00a1' : 'transparent'};
+
+  &:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
 `;
 
 /*/styles for Footer.js/*/
