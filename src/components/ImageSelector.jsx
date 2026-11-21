@@ -4,7 +4,7 @@ import { InputContainer, Label, Input } from '../styling/styles';
 export default function ImageSelector({ handleImage }) {
   return (
     <InputContainer>
-      <Label htmlFor="image">Image URL:</Label>
+      <Label htmlFor="image">Upload image:</Label>
       <Input id="image" name="image" type="file" onChange={handleImage}/>
     </InputContainer>
   );

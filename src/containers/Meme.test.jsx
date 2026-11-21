@@ -19,7 +19,7 @@ beforeEach(() => {
 describe('Meme', () => {
   it('connects every label to its form control', () => {
     render(<Meme />);
-    ['Top text:', 'Bottom text:', 'Text color:', 'Font:', 'Text Size:', 'Image URL:'].forEach(label => {
+    ['Top text:', 'Bottom text:', 'Text color:', 'Font:', 'Text Size:', 'Upload image:'].forEach(label => {
       expect(screen.getByLabelText(label)).toBeTruthy();
     });
   });
