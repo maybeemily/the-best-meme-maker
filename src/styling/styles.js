@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import sparkle from '../assets/sparkle-transparent-shine.gif';
 
 /*/styles for Header.js/*/
@@ -149,18 +149,42 @@ export const Label = styled.label`
   text-align: left;
 `;
 
-export const Input = styled.input`
-  font-family: 'Noto Sans HK', sans-serif;
+// One look for every form box: text inputs, the color picker and the dropdowns.
+const formBox = css`
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
+  height: 2.5rem;
   margin: 0;
-  padding: .4rem;
+  padding: 0 .6rem;
+  font-family: 'Noto Sans HK', sans-serif;
+  font-size: 1rem;
+  color: #222;
+  background-color: white;
+  border: 1px solid #767676;
+  border-radius: 2px;
+`;
+
+export const Input = styled.input`
+  ${formBox}
 
   &[type='color'] {
-    width: 4rem;
-    height: 2.2rem;
-    padding: 2px;
+    padding: 3px;
+    cursor: pointer;
+  }
+
+  &[type='color']::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &[type='color']::-webkit-color-swatch {
+    border: none;
+    border-radius: 1px;
+  }
+
+  &[type='color']::-moz-color-swatch {
+    border: none;
+    border-radius: 1px;
   }
 `;
 
@@ -169,15 +193,12 @@ export const Input = styled.input`
 const chevron = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' fill=\'none\' stroke=\'%23333\' stroke-width=\'1.5\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E")';
 
 export const Select = styled.select`
-  font-family: 'Noto Sans HK', sans-serif;
-  box-sizing: border-box;
-  width: 100%;
-  margin: 0;
-  padding: .4rem 2rem .4rem .4rem;
+  ${formBox}
+  padding-right: 2rem;
   appearance: none;
-  background: white ${chevron} no-repeat right 5px center;
-  border: 1px solid #767676;
-  border-radius: 2px;
+  background-image: ${chevron};
+  background-repeat: no-repeat;
+  background-position: right 5px center;
 `;
 
 export const HiddenFileInput = styled.input`
@@ -211,9 +232,10 @@ export const Buttons = styled.div`
 
 export const Button = styled.button`
   font-family: 'Noto Sans HK', sans-serif;
+  flex: 1;
   font-weight: bold;
   margin: 0;
-  padding: .7rem 1.4rem;
+  padding: .7rem 1rem;
   border-radius: 6px;
   border: 2px solid #ff00a1;
   cursor: pointer;
