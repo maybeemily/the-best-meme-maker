@@ -4,13 +4,15 @@ import TextSelector from '../components/TextSelector';
 import ImageSelector from '../components/ImageSelector';
 import domtoimage from 'dom-to-image';
 import exportSize from '../exportSize';
-import { IntroP, Layout, Stage, DropBox, UploadPill, Controls, Buttons, Button } from '../styling/styles';
+import { isSupportedImage, IMAGE_TYPES_LABEL } from '../imageTypes';
+import { IntroP, ErrorMessage, Layout, Stage, DropBox, UploadPill, Controls, Buttons, Button } from '../styling/styles';
 
 const initialState = {
   topText: '',
   bottomText: '',
   image: '',
   fileName: '',
+  error: '',
   textColor: '#ffffff',
   fontSize: '3em',
   font: 'sans-serif',
@@ -30,10 +32,17 @@ export default class Meme extends PureComponent {
   };
 
   loadImage = file => {
-    if(!file || !file.type.startsWith('image/')) return;
+    if(!file) return;
+    if(!isSupportedImage(file)) {
+      this.setState({ error: `"${file.name}" isn't a supported image. Please choose a ${IMAGE_TYPES_LABEL} file.` });
+      return;
+    }
     const reader = new FileReader();
     reader.onload = event => {
-      this.setState({ image: event.target.result, fileName: file.name });
+      this.setState({ image: event.target.result, fileName: file.name, error: '' });
+    };
+    reader.onerror = () => {
+      this.setState({ error: `Sorry, "${file.name}" couldn't be read. Please try another image.` });
     };
     reader.readAsDataURL(file);
   };
@@ -85,11 +94,12 @@ export default class Meme extends PureComponent {
   };
 
   render() {
-    const { topText, bottomText, textColor, image, font, fontSize, dragging } = this.state;
+    const { topText, bottomText, textColor, image, font, fontSize, dragging, error } = this.state;
     return (
       <>
         <IntroP>Make your own meme, advice animal, picture with text... whatever you want to call it.<br/>
           Upload a photo from your computer, type the words you want, and save!</IntroP>
+        {error && <ErrorMessage role="alert">{error}</ErrorMessage>}
         <Layout>
           <Stage
             $dragging={dragging}

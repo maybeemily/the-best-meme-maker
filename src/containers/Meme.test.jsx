@@ -59,12 +59,62 @@ describe('Meme: uploading', () => {
     await waitFor(() => expect(previewSrc(container)).toMatch(/^data:image\/gif;base64,/));
   });
 
-  it('ignores dropped files that are not images', async() => {
+  it('accepts JPEG, PNG, WebP and GIF files', async() => {
+    for(const [name, type] of [['a.jpg', 'image/jpeg'], ['b.png', 'image/png'], ['c.webp', 'image/webp'], ['d.gif', 'image/gif']]) {
+      cleanup();
+      const { container } = render(<Meme />);
+      dropFile(screen.getByText('Upload image').closest('label'), makeFile(name, type));
+      await waitFor(() => expect(previewSrc(container)).toMatch(new RegExp(`^data:${type}`)));
+      expect(screen.queryByRole('alert')).toBeNull();
+    }
+  });
+
+  it.each([
+    ['notes.txt', 'text/plain'],
+    ['doc.pdf', 'application/pdf'],
+    ['logo.svg', 'image/svg+xml'],
+    ['photo.heic', 'image/heic'],
+    ['mystery', '']
+  ])('shows an error and keeps the box when %s is dropped', async(name, type) => {
     const { container } = render(<Meme />);
-    dropFile(screen.getByText('Upload image').closest('label'), makeFile('notes.txt', 'text/plain'));
-    await new Promise(resolve => setTimeout(resolve, 50));
+    dropFile(screen.getByText('Upload image').closest('label'), makeFile(name, type));
+    const alert = await screen.findByRole('alert');
+    expect(alert.textContent).toContain(name);
+    expect(alert.textContent).toContain('JPEG, PNG, WebP or GIF');
     expect(container.querySelector('img')).toBeNull();
     expect(screen.getByText('Upload image')).toBeTruthy();
+  });
+
+  it('shows the same error when a bad file is chosen with the file picker', async() => {
+    const { container } = render(<Meme />);
+    fireEvent.change(field(container, 'image'), { target: { files: [makeFile('notes.txt', 'text/plain')] } });
+    expect((await screen.findByRole('alert')).textContent).toContain('notes.txt');
+  });
+
+  it('only offers supported image types in the file picker', () => {
+    const { container } = render(<Meme />);
+    expect(field(container, 'image').getAttribute('accept')).toBe('image/jpeg,image/png,image/webp,image/gif');
+  });
+
+  it('keeps the current image and shows an error when a bad file replaces it, then clears the error on a good upload', async() => {
+    const { container } = render(<Meme />);
+    await uploadImage(container, makeFile('good.png'));
+    const before = previewSrc(container);
+    dropFile(container.querySelector('img').closest('div').parentElement, makeFile('bad.pdf', 'application/pdf'));
+    expect(await screen.findByRole('alert')).toBeTruthy();
+    expect(previewSrc(container)).toBe(before);
+
+    await uploadImage(container, makeFile('better.jpg', 'image/jpeg'));
+    await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
+  });
+
+  it('clears the error on Start Over', async() => {
+    const { container } = render(<Meme />);
+    dropFile(screen.getByText('Upload image').closest('label'), makeFile('notes.txt', 'text/plain'));
+    await screen.findByRole('alert');
+    fireEvent.click(screen.getByText('Start Over'));
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(container.querySelector('img')).toBeNull();
   });
 });
 

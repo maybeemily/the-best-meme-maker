@@ -22,6 +22,18 @@ export const IntroP = styled.p`
   margin-bottom: 5vh;;
 `;
 
+export const ErrorMessage = styled.p`
+  box-sizing: border-box;
+  max-width: 600px;
+  margin: -2vh auto 3vh;
+  padding: .75rem 1rem;
+  text-align: center;
+  color: #8a0020;
+  background-color: #ffe3e8;
+  border: 1px solid #d6002f;
+  border-radius: 6px;
+`;
+
 export const Layout = styled.div`
   display: flex;
   justify-content: center;
