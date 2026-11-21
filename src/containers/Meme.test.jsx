@@ -43,6 +43,16 @@ describe('Meme: empty state', () => {
   });
 });
 
+describe('Meme: text color', () => {
+  it('starts as the site pink, on the picker and on the meme text', async() => {
+    const { container } = render(<Meme />);
+    expect(field(container, 'textColor').value).toBe('#ff00a1');
+    await uploadImage(container);
+    change(field(container, 'topText'), 'PINK');
+    expect(spanStyle('PINK').color).toBe('rgb(255, 0, 161)');
+  });
+});
+
 describe('Meme: dropdowns', () => {
   it.each(['font', 'fontSize'])('every option in the %s dropdown has its own value', name => {
     const { container } = render(<Meme />);
@@ -176,7 +186,7 @@ describe('Meme: editing', () => {
     expect(screen.queryByText('GONE')).toBeNull();
     expect(container.querySelector('img')).toBeNull();
     expect(screen.getByText('Upload image')).toBeTruthy();
-    expect(field(container, 'textColor').value).toBe('#ffffff');
+    expect(field(container, 'textColor').value).toBe('#ff00a1');
     expect(field(container, 'fontSize').value).toBe('3em');
     expect(field(container, 'font').value).toBe('sans-serif');
   });

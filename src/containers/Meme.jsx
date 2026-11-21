@@ -13,7 +13,7 @@ const initialState = {
   image: '',
   fileName: '',
   error: '',
-  textColor: '#ffffff',
+  textColor: '#ff00a1',
   fontSize: '3em',
   font: 'sans-serif',
   dragging: false
