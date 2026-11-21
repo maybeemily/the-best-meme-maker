@@ -3,6 +3,7 @@ import Display from '../components/Display';
 import TextSelector from '../components/TextSelector';
 import ImageSelector from '../components/ImageSelector';
 import domtoimage from 'dom-to-image';
+import exportSize from '../exportSize';
 import { IntroP, Layout, Stage, DropBox, UploadPill, Controls, Buttons, Button } from '../styling/styles';
 
 const initialState = {
@@ -60,7 +61,16 @@ export default class Meme extends PureComponent {
   saveMeme = event => {
     event.preventDefault();
     const { fileName } = this.state;
-    domtoimage.toPng(this.memeRef.current)
+    const node = this.memeRef.current;
+    const img = node.querySelector('img');
+    const { width, height } = exportSize(img.naturalWidth, img.naturalHeight)
+      || { width: node.offsetWidth, height: node.offsetHeight };
+    // Render the meme scaled up (text included) so the file matches the original image size.
+    domtoimage.toPng(node, {
+      width,
+      height,
+      style: { transform: `scale(${width / node.offsetWidth}, ${height / node.offsetHeight})`, transformOrigin: 'top left' }
+    })
       .then(img => {
         const link = document.createElement('a');
         link.href = img;

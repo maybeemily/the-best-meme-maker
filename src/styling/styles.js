@@ -120,6 +120,7 @@ export const Controls = styled.div`
   flex: 1 1 auto;
   width: 100%;
   max-width: 420px;
+  text-align: left;
   font-family: 'Noto Sans HK', sans-serif;
 `;
 
@@ -133,7 +134,7 @@ export const Fields = styled.div`
 
 export const Label = styled.label`
   font-family: 'Noto Sans HK', sans-serif;
-  text-align: right;
+  text-align: left;
 `;
 
 export const Input = styled.input`

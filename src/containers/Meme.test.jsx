@@ -134,6 +134,25 @@ describe('Meme: saving', () => {
     expect(link).toEqual({ download: 'memed-my.cat.png', href: 'data:image/png;base64,AAAA' });
   });
 
+  it('renders the meme at the original image resolution', async() => {
+    const { container } = render(<Meme />);
+    await uploadImage(container);
+    const img = container.querySelector('img');
+    Object.defineProperty(img, 'naturalWidth', { value: 1200 });
+    Object.defineProperty(img, 'naturalHeight', { value: 1800 });
+    const node = img.parentElement;
+    Object.defineProperty(node, 'offsetWidth', { value: 300 });
+    Object.defineProperty(node, 'offsetHeight', { value: 450 });
+
+    await saveAndGetLink();
+
+    expect(domtoimage.toPng).toHaveBeenCalledWith(node, {
+      width: 1200,
+      height: 1800,
+      style: { transform: 'scale(4, 4)', transformOrigin: 'top left' }
+    });
+  });
+
   it('uses the name of the most recently uploaded file', async() => {
     const { container } = render(<Meme />);
     await uploadImage(container, makeFile('first.png'));
