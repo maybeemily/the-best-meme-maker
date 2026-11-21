@@ -21,7 +21,6 @@ export default function TextSelector({ topText, bottomText, textColor, font, fon
       </Select>
       <Label htmlFor="fontSize">Text Size:</Label>
       <Select id="fontSize" name="fontSize" value={fontSize} onChange={handleChange}>
-        <option value="3em">*select one*</option>
         <option value="1em">small</option>
         <option value="3em">medium</option>
         <option value="6em">big</option>

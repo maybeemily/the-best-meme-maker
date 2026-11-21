@@ -43,6 +43,25 @@ describe('Meme: empty state', () => {
   });
 });
 
+describe('Meme: dropdowns', () => {
+  it.each(['font', 'fontSize'])('every option in the %s dropdown has its own value', name => {
+    const { container } = render(<Meme />);
+    const values = [...field(container, name).options].map(option => option.value);
+    expect(new Set(values).size).toBe(values.length);
+  });
+
+  it('shows "medium" as the default text size and lets you pick any size, including medium again', () => {
+    const { container } = render(<Meme />);
+    const select = field(container, 'fontSize');
+    const shown = () => select.selectedOptions[0].textContent;
+    expect(shown()).toBe('medium');
+    for(const [value, label] of [['1em', 'small'], ['3em', 'medium'], ['6em', 'big'], ['9em', 'too big'], ['3em', 'medium']]) {
+      change(select, value);
+      expect(shown()).toBe(label);
+    }
+  });
+});
+
 describe('Meme: uploading', () => {
   it('replaces the box with the meme preview when an image is chosen', async() => {
     const { container } = render(<Meme />);
